@@ -1,4 +1,4 @@
-using PCActivityTimeline.Core;
+﻿using PCActivityTimeline.Core;
 using PCActivityTimeline.Models;
 using System;
 using System.Collections.Generic;
@@ -51,6 +51,8 @@ namespace PCActivityTimeline
         {
             tracker = new ActivityTracker(new WindowInfoProvider(), activityManager);
             InitializeComponent();
+            UiTheme.ApplyForm(this);
+            ApplyModernLayout();
             ConfigureActivityGridColumns();
             InitializeTrayIcon();
             SetTrackingLight(false);
@@ -58,6 +60,24 @@ namespace PCActivityTimeline
             TryLoadKeywordRules();
             TryLoadDefaultData();
             RefreshGrid();
+        }
+
+        private void ApplyModernLayout()
+        {
+            UiTheme.ApplyBackgroundCanvas(mainPanel);
+
+            topBarPanel.BackColor = UiTheme.SoftBlue;
+            toolbarPanel.BackColor = UiTheme.SoftBlue;
+            datePanel.BackColor = UiTheme.SoftBlue;
+            exitPanel.BackColor = UiTheme.SoftBlue;
+            editorPanel.BackColor = UiTheme.CardBlue;
+            editorButtonPanel.BackColor = UiTheme.CardBlue;
+
+            txtSummary.BackColor = UiTheme.CardBlue;
+            txtSummary.ForeColor = UiTheme.Text;
+            grid.BackgroundColor = UiTheme.Card;
+            lblStatus.ForeColor = UiTheme.AccentDark;
+            lblNotice.ForeColor = UiTheme.AccentDark;
         }
 
         private void ConfigureActivityGridColumns()
@@ -100,7 +120,7 @@ namespace PCActivityTimeline
                 {
                     trackingTimer.Stop();
                     SetTrackingLight(false);
-                    MessageBox.Show("활동 기록 중 오류가 발생했습니다.\n" + ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    AppDialog.Show(this, "활동 기록 중 오류가 발생했습니다.\n" + ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     SetNotice("오류: 기록을 중지했습니다. " + ex.Message);
                 }
             };
@@ -116,7 +136,7 @@ namespace PCActivityTimeline
             trayMenu.Items.Add("완전 종료", null, ExitApplication);
 
             trayIcon = new NotifyIcon();
-            trayIcon.Icon = SystemIcons.Application;
+            trayIcon.Icon = UiTheme.GetApplicationIcon();
             trayIcon.Text = "나 뭐 했지? - PC Activity Timeline";
             trayIcon.ContextMenuStrip = trayMenu;
             trayIcon.Visible = false;
@@ -161,12 +181,13 @@ namespace PCActivityTimeline
             {
                 trackingTimer.Stop();
                 SetTrackingLight(false);
-                MessageBox.Show("기록 시작 중 오류가 발생했습니다.\n" + ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Show(this, "기록 시작 중 오류가 발생했습니다.\n" + ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void DateFilterPicker_ValueChanged(object sender, EventArgs e)
         {
+            ResetEditorFields();
             RefreshGrid();
         }
 
@@ -221,7 +242,7 @@ namespace PCActivityTimeline
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Show(this, ex.Message, "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -229,7 +250,7 @@ namespace PCActivityTimeline
         {
             if (string.IsNullOrWhiteSpace(selectedId))
             {
-                MessageBox.Show("수정할 기록을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "수정할 기록을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -243,7 +264,7 @@ namespace PCActivityTimeline
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Show(this, ex.Message, "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -251,11 +272,11 @@ namespace PCActivityTimeline
         {
             if (string.IsNullOrWhiteSpace(selectedId))
             {
-                MessageBox.Show("삭제할 기록을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "삭제할 기록을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            var result = MessageBox.Show("선택한 기록을 삭제할까요?", "삭제 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = AppDialog.Show(this, "선택한 기록을 삭제할까요?", "삭제 확인", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result != DialogResult.Yes) return;
 
             activityManager.Delete(selectedId);
@@ -271,7 +292,7 @@ namespace PCActivityTimeline
                 ? "오늘 기록을 모두 초기화하시겠습니까?"
                 : targetDate.ToString("yyyy-MM-dd") + " 기록을 모두 초기화하시겠습니까?";
 
-            var result = MessageBox.Show(
+            var result = AppDialog.Show(this, 
                 message + "\n삭제된 기록은 저장 전이라도 목록에서 제거됩니다.",
                 "기록 초기화 확인",
                 MessageBoxButtons.YesNo,
@@ -295,6 +316,8 @@ namespace PCActivityTimeline
             if (endPicker.Value < startPicker.Value)
                 throw new InvalidOperationException("종료 시간은 시작 시간보다 빠를 수 없습니다.");
 
+            ValidateNoTimeOverlap(id, startPicker.Value, endPicker.Value);
+
             return new ActivityRecord
             {
                 Id = string.IsNullOrWhiteSpace(id) ? Guid.NewGuid().ToString("N") : id,
@@ -305,6 +328,25 @@ namespace PCActivityTimeline
                 EndTime = endPicker.Value,
                 Memo = txtMemo.Text.Trim()
             };
+        }
+
+        private void ValidateNoTimeOverlap(string editingId, DateTime startTime, DateTime endTime)
+        {
+            var overlap = activityManager.GetByDate(startTime)
+                .FirstOrDefault(r =>
+                    r.Id != editingId &&
+                    r.StartTime < endTime &&
+                    startTime < r.EndTime);
+
+            if (overlap == null) return;
+
+            string message = string.Format(
+                "입력한 시간이 기존 기록과 겹칩니다.\n\n기존 기록: {0} ~ {1} / {2}\n겹치지 않도록 시간을 조정하세요.",
+                overlap.StartTime.ToString("HH:mm:ss"),
+                overlap.EndTime.ToString("HH:mm:ss"),
+                overlap.ProgramName);
+
+            throw new InvalidOperationException(message);
         }
 
         private void Grid_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -339,10 +381,22 @@ namespace PCActivityTimeline
             txtProgramName.Text = "";
             txtWindowTitle.Text = "";
             cmbCategory.Text = "미분류";
-            startPicker.Value = DateTime.Now;
-            endPicker.Value = DateTime.Now;
+            DateTime defaultTime = GetDefaultEditorTime();
+            startPicker.Value = defaultTime;
+            endPicker.Value = defaultTime;
             txtMemo.Text = "";
             grid.ClearSelection();
+        }
+
+        private DateTime GetDefaultEditorTime()
+        {
+            DateTime selectedDate = dateFilterPicker == null ? DateTime.Today : dateFilterPicker.Value.Date;
+            DateTime now = DateTime.Now;
+
+            if (selectedDate == DateTime.Today)
+                return now;
+
+            return selectedDate.AddHours(9);
         }
 
         private void ExitApplication(object sender, EventArgs e)
@@ -359,7 +413,7 @@ namespace PCActivityTimeline
             }
             catch (Exception ex)
             {
-                MessageBox.Show("종료 전 자동 저장 중 오류가 발생했습니다.\n" + ex.Message, "저장 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Show(this, "종료 전 자동 저장 중 오류가 발생했습니다.\n" + ex.Message, "저장 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             Close();
@@ -474,19 +528,19 @@ namespace PCActivityTimeline
 
             string value = category ?? "";
             if (value == "과제")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(225, 238, 255);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(230, 243, 252);
             else if (value == "자료검색")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(255, 248, 220);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(253, 235, 233);
             else if (value == "수업/시험")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(235, 225, 255);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(245, 238, 249);
             else if (value == "문서작성")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(230, 255, 240);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(253, 242, 232);
             else if (value == "휴식")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(232, 246, 239);
             else if (value == "기타")
-                row.DefaultCellStyle.BackColor = Color.FromArgb(245, 245, 255);
+                row.DefaultCellStyle.BackColor = Color.FromArgb(242, 244, 244);
             else
-                row.DefaultCellStyle.BackColor = Color.White;
+                row.DefaultCellStyle.BackColor = Color.FromArgb(247, 249, 249);
         }
 
         private void RestoreGridState(string keepSelectedId, int firstDisplayedRowIndex)
@@ -555,11 +609,11 @@ namespace PCActivityTimeline
                 activityStorage.Save(activityManager.GetAll(), defaultDataPath);
                 keywordRuleStorage.Save(keywordRules, keywordRulesPath);
                 SetNotice("저장 완료: " + defaultDataPath);
-                MessageBox.Show("활동 기록을 저장했습니다.", "저장", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "활동 기록을 저장했습니다.", "저장", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("저장 중 오류가 발생했습니다.\n" + ex.Message, "저장 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Show(this, "저장 중 오류가 발생했습니다.\n" + ex.Message, "저장 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -571,11 +625,11 @@ namespace PCActivityTimeline
                 activityManager.ReplaceAll(records);
                 RefreshGrid();
                 SetNotice("불러오기 완료: " + defaultDataPath);
-                MessageBox.Show("활동 기록을 불러왔습니다.", "불러오기", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "활동 기록을 불러왔습니다.", "불러오기", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("불러오기 중 오류가 발생했습니다.\n" + ex.Message, "불러오기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Show(this, "불러오기 중 오류가 발생했습니다.\n" + ex.Message, "불러오기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -586,7 +640,7 @@ namespace PCActivityTimeline
                 var records = activityManager.GetByDate(dateFilterPicker.Value);
                 if (records.Count == 0)
                 {
-                    MessageBox.Show("내보낼 활동 기록이 없습니다.", "CSV 내보내기", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AppDialog.Show(this, "내보낼 활동 기록이 없습니다.", "CSV 내보내기", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
 
@@ -600,12 +654,12 @@ namespace PCActivityTimeline
 
                     File.WriteAllText(dialog.FileName, BuildCsv(records), new System.Text.UTF8Encoding(true));
                     SetNotice("CSV 저장 완료: " + dialog.FileName);
-                    MessageBox.Show("CSV 파일을 저장했습니다.", "CSV 내보내기", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    AppDialog.Show(this, "CSV 파일을 저장했습니다.", "CSV 내보내기", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("CSV 내보내기 중 오류가 발생했습니다.\n" + ex.Message, "CSV 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppDialog.Show(this, "CSV 내보내기 중 오류가 발생했습니다.\n" + ex.Message, "CSV 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -726,63 +780,10 @@ namespace PCActivityTimeline
 
         private CloseChoice ShowCloseChoiceDialog()
         {
-            using (var form = new Form())
-            using (var lblMessage = new Label())
-            using (var btnMinimize = new Button())
-            using (var btnExit = new Button())
-            using (var btnCancel = new Button())
-            {
-                form.Text = "종료 방식 선택";
-                form.StartPosition = FormStartPosition.CenterParent;
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
-                form.ClientSize = new Size(360, 150);
-                form.Font = new Font("Malgun Gothic", 9F);
-
-                lblMessage.Text = "프로그램을 어떻게 처리할까요?\n최소화해도 기록은 계속 진행됩니다.";
-                lblMessage.AutoSize = false;
-                lblMessage.TextAlign = ContentAlignment.MiddleLeft;
-                lblMessage.SetBounds(20, 18, 320, 52);
-
-                btnMinimize.Text = "최소화";
-                btnMinimize.SetBounds(30, 92, 90, 34);
-                btnMinimize.Click += (s, e) =>
-                {
-                    form.Tag = CloseChoice.Minimize;
-                    form.DialogResult = DialogResult.OK;
-                    form.Close();
-                };
-
-                btnExit.Text = "완전 종료";
-                btnExit.SetBounds(130, 92, 100, 34);
-                btnExit.Click += (s, e) =>
-                {
-                    form.Tag = CloseChoice.Exit;
-                    form.DialogResult = DialogResult.OK;
-                    form.Close();
-                };
-
-                btnCancel.Text = "취소";
-                btnCancel.SetBounds(240, 92, 90, 34);
-                btnCancel.Click += (s, e) =>
-                {
-                    form.Tag = CloseChoice.Cancel;
-                    form.DialogResult = DialogResult.Cancel;
-                    form.Close();
-                };
-
-                form.Controls.Add(lblMessage);
-                form.Controls.Add(btnMinimize);
-                form.Controls.Add(btnExit);
-                form.Controls.Add(btnCancel);
-                form.AcceptButton = btnMinimize;
-                form.CancelButton = btnCancel;
-                form.Tag = CloseChoice.Cancel;
-
-                form.ShowDialog(this);
-                return (CloseChoice)form.Tag;
-            }
+            DialogResult result = AppDialog.ShowCloseChoice(this);
+            if (result == DialogResult.Yes) return CloseChoice.Minimize;
+            if (result == DialogResult.No) return CloseChoice.Exit;
+            return CloseChoice.Cancel;
         }
 
         protected override void Dispose(bool disposing)

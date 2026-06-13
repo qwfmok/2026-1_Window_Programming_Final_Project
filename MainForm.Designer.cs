@@ -107,8 +107,9 @@ namespace PCActivityTimeline
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
+            this.mainPanel.Padding = new System.Windows.Forms.Padding(14);
             this.mainPanel.RowCount = 3;
-            this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 112F));
+            this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 124F));
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 155F));
             this.mainPanel.Size = new System.Drawing.Size(1220, 760);
@@ -124,12 +125,13 @@ namespace PCActivityTimeline
             this.topBarPanel.Controls.Add(this.exitPanel, 1, 0);
             this.topBarPanel.Controls.Add(this.datePanel, 0, 1);
             this.topBarPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.topBarPanel.Location = new System.Drawing.Point(3, 3);
+            this.topBarPanel.Location = new System.Drawing.Point(14, 14);
+            this.topBarPanel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.topBarPanel.Name = "topBarPanel";
             this.topBarPanel.RowCount = 2;
-            this.topBarPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 58F));
+            this.topBarPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             this.topBarPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.topBarPanel.Size = new System.Drawing.Size(1214, 106);
+            this.topBarPanel.Size = new System.Drawing.Size(1192, 114);
             this.topBarPanel.TabIndex = 0;
             // 
             // toolbarPanel
@@ -147,14 +149,14 @@ namespace PCActivityTimeline
             this.toolbarPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolbarPanel.Location = new System.Drawing.Point(3, 3);
             this.toolbarPanel.Name = "toolbarPanel";
-            this.toolbarPanel.Padding = new System.Windows.Forms.Padding(8, 10, 8, 0);
-            this.toolbarPanel.Size = new System.Drawing.Size(1096, 52);
+            this.toolbarPanel.Padding = new System.Windows.Forms.Padding(12, 12, 8, 0);
+            this.toolbarPanel.Size = new System.Drawing.Size(1074, 56);
             this.toolbarPanel.TabIndex = 0;
             // 
             // lblTrackingLight
             // 
             this.lblTrackingLight.ForeColor = System.Drawing.Color.Red;
-            this.lblTrackingLight.Location = new System.Drawing.Point(20, 14);
+            this.lblTrackingLight.Location = new System.Drawing.Point(24, 16);
             this.lblTrackingLight.Margin = new System.Windows.Forms.Padding(12, 4, 8, 0);
             this.lblTrackingLight.Name = "lblTrackingLight";
             this.lblTrackingLight.Size = new System.Drawing.Size(36, 36);
@@ -164,7 +166,7 @@ namespace PCActivityTimeline
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(67, 10);
+            this.lblStatus.Location = new System.Drawing.Point(71, 12);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Padding = new System.Windows.Forms.Padding(8, 10, 12, 0);
             this.lblStatus.Size = new System.Drawing.Size(86, 35);
@@ -173,7 +175,7 @@ namespace PCActivityTimeline
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(160, 14);
+            this.btnStart.Location = new System.Drawing.Point(164, 16);
             this.btnStart.Margin = new System.Windows.Forms.Padding(4);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(92, 32);
@@ -183,7 +185,7 @@ namespace PCActivityTimeline
             // 
             // btnStop
             // 
-            this.btnStop.Location = new System.Drawing.Point(260, 14);
+            this.btnStop.Location = new System.Drawing.Point(264, 16);
             this.btnStop.Margin = new System.Windows.Forms.Padding(4);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(92, 32);
@@ -193,7 +195,7 @@ namespace PCActivityTimeline
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(360, 14);
+            this.btnSave.Location = new System.Drawing.Point(364, 16);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(92, 32);
@@ -203,7 +205,7 @@ namespace PCActivityTimeline
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(460, 14);
+            this.btnLoad.Location = new System.Drawing.Point(464, 16);
             this.btnLoad.Margin = new System.Windows.Forms.Padding(4);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(92, 32);
@@ -213,7 +215,7 @@ namespace PCActivityTimeline
             // 
             // btnExportCsv
             // 
-            this.btnExportCsv.Location = new System.Drawing.Point(560, 14);
+            this.btnExportCsv.Location = new System.Drawing.Point(564, 16);
             this.btnExportCsv.Margin = new System.Windows.Forms.Padding(4);
             this.btnExportCsv.Name = "btnExportCsv";
             this.btnExportCsv.Size = new System.Drawing.Size(112, 32);
@@ -223,7 +225,7 @@ namespace PCActivityTimeline
             // 
             // btnAnalysis
             // 
-            this.btnAnalysis.Location = new System.Drawing.Point(680, 14);
+            this.btnAnalysis.Location = new System.Drawing.Point(684, 16);
             this.btnAnalysis.Margin = new System.Windows.Forms.Padding(4);
             this.btnAnalysis.Name = "btnAnalysis";
             this.btnAnalysis.Size = new System.Drawing.Size(92, 32);
@@ -233,7 +235,7 @@ namespace PCActivityTimeline
             // 
             // btnRules
             // 
-            this.btnRules.Location = new System.Drawing.Point(780, 14);
+            this.btnRules.Location = new System.Drawing.Point(784, 16);
             this.btnRules.Margin = new System.Windows.Forms.Padding(4);
             this.btnRules.Name = "btnRules";
             this.btnRules.Size = new System.Drawing.Size(92, 32);
@@ -243,7 +245,7 @@ namespace PCActivityTimeline
             // 
             // btnManual
             // 
-            this.btnManual.Location = new System.Drawing.Point(880, 14);
+            this.btnManual.Location = new System.Drawing.Point(884, 16);
             this.btnManual.Margin = new System.Windows.Forms.Padding(4);
             this.btnManual.Name = "btnManual";
             this.btnManual.Size = new System.Drawing.Size(92, 32);
@@ -255,10 +257,10 @@ namespace PCActivityTimeline
             // 
             this.exitPanel.Controls.Add(this.btnExit);
             this.exitPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exitPanel.Location = new System.Drawing.Point(1105, 3);
+            this.exitPanel.Location = new System.Drawing.Point(1083, 3);
             this.exitPanel.Name = "exitPanel";
             this.exitPanel.Padding = new System.Windows.Forms.Padding(4, 8, 8, 0);
-            this.exitPanel.Size = new System.Drawing.Size(106, 52);
+            this.exitPanel.Size = new System.Drawing.Size(106, 56);
             this.exitPanel.TabIndex = 1;
             // 
             // btnExit
@@ -281,17 +283,17 @@ namespace PCActivityTimeline
             this.datePanel.Controls.Add(this.btnClearToday);
             this.datePanel.Controls.Add(this.lblNotice);
             this.datePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.datePanel.Location = new System.Drawing.Point(3, 61);
+            this.datePanel.Location = new System.Drawing.Point(3, 65);
             this.datePanel.Name = "datePanel";
-            this.datePanel.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
-            this.datePanel.Size = new System.Drawing.Size(1208, 42);
+            this.datePanel.Padding = new System.Windows.Forms.Padding(12, 0, 8, 0);
+            this.datePanel.Size = new System.Drawing.Size(1186, 46);
             this.datePanel.TabIndex = 2;
             this.datePanel.WrapContents = false;
             // 
             // lblDateFilter
             // 
             this.lblDateFilter.AutoSize = true;
-            this.lblDateFilter.Location = new System.Drawing.Point(11, 0);
+            this.lblDateFilter.Location = new System.Drawing.Point(15, 0);
             this.lblDateFilter.Name = "lblDateFilter";
             this.lblDateFilter.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
             this.lblDateFilter.Size = new System.Drawing.Size(90, 33);
@@ -301,7 +303,7 @@ namespace PCActivityTimeline
             // dateFilterPicker
             // 
             this.dateFilterPicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateFilterPicker.Location = new System.Drawing.Point(107, 3);
+            this.dateFilterPicker.Location = new System.Drawing.Point(111, 3);
             this.dateFilterPicker.Name = "dateFilterPicker";
             this.dateFilterPicker.Size = new System.Drawing.Size(150, 31);
             this.dateFilterPicker.TabIndex = 1;
@@ -309,7 +311,7 @@ namespace PCActivityTimeline
             // 
             // btnToday
             // 
-            this.btnToday.Location = new System.Drawing.Point(264, 4);
+            this.btnToday.Location = new System.Drawing.Point(268, 4);
             this.btnToday.Margin = new System.Windows.Forms.Padding(4);
             this.btnToday.Name = "btnToday";
             this.btnToday.Size = new System.Drawing.Size(92, 32);
@@ -319,7 +321,7 @@ namespace PCActivityTimeline
             // 
             // btnClearToday
             // 
-            this.btnClearToday.Location = new System.Drawing.Point(364, 4);
+            this.btnClearToday.Location = new System.Drawing.Point(368, 4);
             this.btnClearToday.Margin = new System.Windows.Forms.Padding(4);
             this.btnClearToday.Name = "btnClearToday";
             this.btnClearToday.Size = new System.Drawing.Size(120, 32);
@@ -331,7 +333,7 @@ namespace PCActivityTimeline
             // 
             this.lblNotice.AutoSize = true;
             this.lblNotice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(70)))));
-            this.lblNotice.Location = new System.Drawing.Point(491, 0);
+            this.lblNotice.Location = new System.Drawing.Point(495, 0);
             this.lblNotice.Name = "lblNotice";
             this.lblNotice.Padding = new System.Windows.Forms.Padding(18, 8, 0, 0);
             this.lblNotice.Size = new System.Drawing.Size(232, 33);
@@ -357,7 +359,8 @@ namespace PCActivityTimeline
             this.dataGridViewTextBoxColumn7,
             this.dataGridViewTextBoxColumn8});
             this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.grid.Location = new System.Drawing.Point(3, 115);
+            this.grid.Location = new System.Drawing.Point(14, 138);
+            this.grid.Margin = new System.Windows.Forms.Padding(0, 0, 10, 10);
             this.grid.MultiSelect = false;
             this.grid.Name = "grid";
             this.grid.ReadOnly = true;
@@ -365,7 +368,7 @@ namespace PCActivityTimeline
             this.grid.RowHeadersWidth = 62;
             this.grid.RowTemplate.Height = 24;
             this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.grid.Size = new System.Drawing.Size(811, 487);
+            this.grid.Size = new System.Drawing.Size(788, 443);
             this.grid.TabIndex = 1;
             this.grid.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_CellClick);
             // 
@@ -388,7 +391,8 @@ namespace PCActivityTimeline
             this.editorPanel.Controls.Add(this.txtMemo, 1, 5);
             this.editorPanel.Controls.Add(this.editorButtonPanel, 0, 8);
             this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorPanel.Location = new System.Drawing.Point(820, 115);
+            this.editorPanel.Location = new System.Drawing.Point(812, 138);
+            this.editorPanel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.editorPanel.Name = "editorPanel";
             this.editorPanel.Padding = new System.Windows.Forms.Padding(8);
             this.editorPanel.RowCount = 9;
@@ -401,7 +405,7 @@ namespace PCActivityTimeline
             this.editorPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.editorPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.editorPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
-            this.editorPanel.Size = new System.Drawing.Size(397, 487);
+            this.editorPanel.Size = new System.Drawing.Size(394, 443);
             this.editorPanel.TabIndex = 2;
             // 
             // lblProgramName
@@ -419,7 +423,7 @@ namespace PCActivityTimeline
             this.txtProgramName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtProgramName.Location = new System.Drawing.Point(97, 11);
             this.txtProgramName.Name = "txtProgramName";
-            this.txtProgramName.Size = new System.Drawing.Size(289, 31);
+            this.txtProgramName.Size = new System.Drawing.Size(286, 31);
             this.txtProgramName.TabIndex = 1;
             // 
             // lblWindowTitle
@@ -437,7 +441,7 @@ namespace PCActivityTimeline
             this.txtWindowTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtWindowTitle.Location = new System.Drawing.Point(97, 47);
             this.txtWindowTitle.Name = "txtWindowTitle";
-            this.txtWindowTitle.Size = new System.Drawing.Size(289, 31);
+            this.txtWindowTitle.Size = new System.Drawing.Size(286, 31);
             this.txtWindowTitle.TabIndex = 3;
             // 
             // lblCategory
@@ -463,7 +467,7 @@ namespace PCActivityTimeline
             "미분류"});
             this.cmbCategory.Location = new System.Drawing.Point(97, 83);
             this.cmbCategory.Name = "cmbCategory";
-            this.cmbCategory.Size = new System.Drawing.Size(289, 33);
+            this.cmbCategory.Size = new System.Drawing.Size(286, 33);
             this.cmbCategory.TabIndex = 5;
             this.cmbCategory.Text = "미분류";
             // 
@@ -484,7 +488,7 @@ namespace PCActivityTimeline
             this.startPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.startPicker.Location = new System.Drawing.Point(97, 119);
             this.startPicker.Name = "startPicker";
-            this.startPicker.Size = new System.Drawing.Size(289, 31);
+            this.startPicker.Size = new System.Drawing.Size(286, 31);
             this.startPicker.TabIndex = 7;
             // 
             // lblEndTime
@@ -504,7 +508,7 @@ namespace PCActivityTimeline
             this.endPicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.endPicker.Location = new System.Drawing.Point(97, 155);
             this.endPicker.Name = "endPicker";
-            this.endPicker.Size = new System.Drawing.Size(289, 31);
+            this.endPicker.Size = new System.Drawing.Size(286, 31);
             this.endPicker.TabIndex = 9;
             // 
             // lblMemo
@@ -512,7 +516,7 @@ namespace PCActivityTimeline
             this.lblMemo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblMemo.Location = new System.Drawing.Point(11, 188);
             this.lblMemo.Name = "lblMemo";
-            this.lblMemo.Size = new System.Drawing.Size(80, 243);
+            this.lblMemo.Size = new System.Drawing.Size(80, 199);
             this.lblMemo.TabIndex = 10;
             this.lblMemo.Text = "메모";
             this.lblMemo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -525,7 +529,7 @@ namespace PCActivityTimeline
             this.txtMemo.Name = "txtMemo";
             this.editorPanel.SetRowSpan(this.txtMemo, 3);
             this.txtMemo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMemo.Size = new System.Drawing.Size(289, 237);
+            this.txtMemo.Size = new System.Drawing.Size(286, 193);
             this.txtMemo.TabIndex = 11;
             // 
             // editorButtonPanel
@@ -535,9 +539,9 @@ namespace PCActivityTimeline
             this.editorButtonPanel.Controls.Add(this.btnUpdate);
             this.editorButtonPanel.Controls.Add(this.btnDelete);
             this.editorButtonPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorButtonPanel.Location = new System.Drawing.Point(11, 434);
+            this.editorButtonPanel.Location = new System.Drawing.Point(11, 390);
             this.editorButtonPanel.Name = "editorButtonPanel";
-            this.editorButtonPanel.Size = new System.Drawing.Size(375, 42);
+            this.editorButtonPanel.Size = new System.Drawing.Size(372, 42);
             this.editorButtonPanel.TabIndex = 12;
             // 
             // btnAdd
@@ -578,11 +582,12 @@ namespace PCActivityTimeline
             this.txtSummary.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSummary.Font = new System.Drawing.Font("맑은 고딕", 9.5F);
             this.txtSummary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.txtSummary.Location = new System.Drawing.Point(3, 608);
+            this.txtSummary.Location = new System.Drawing.Point(14, 591);
+            this.txtSummary.Margin = new System.Windows.Forms.Padding(0);
             this.txtSummary.Name = "txtSummary";
             this.txtSummary.ReadOnly = true;
             this.txtSummary.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txtSummary.Size = new System.Drawing.Size(1214, 149);
+            this.txtSummary.Size = new System.Drawing.Size(1192, 155);
             this.txtSummary.TabIndex = 3;
             this.txtSummary.Text = "";
             // 

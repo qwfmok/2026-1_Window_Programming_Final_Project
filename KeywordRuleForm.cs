@@ -1,4 +1,4 @@
-using PCActivityTimeline.Models;
+﻿using PCActivityTimeline.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,17 @@ namespace PCActivityTimeline
                 : currentRules.Select(r => new KeywordRule { Keyword = r.Keyword, Category = r.Category }).ToList();
 
             InitializeComponent();
+            UiTheme.ApplyForm(this);
+            ApplyModernLayout();
             RefreshGrid();
+        }
+
+        private void ApplyModernLayout()
+        {
+            UiTheme.ApplyBackgroundCanvas(mainPanel);
+            gridRules.BackgroundColor = UiTheme.Card;
+            editorButtons.BackColor = UiTheme.CardBlue;
+            bottomButtons.BackColor = UiTheme.CardBlue;
         }
 
         private void RefreshGrid()
@@ -47,13 +57,13 @@ namespace PCActivityTimeline
 
             if (keyword.Length == 0)
             {
-                MessageBox.Show("키워드를 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Show(this, "키워드를 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (category.Length == 0)
             {
-                MessageBox.Show("분류를 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Show(this, "분류를 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -67,7 +77,7 @@ namespace PCActivityTimeline
         {
             if (gridRules.CurrentRow == null || gridRules.CurrentRow.Index < 0 || gridRules.CurrentRow.Index >= rules.Count)
             {
-                MessageBox.Show("수정할 규칙을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "수정할 규칙을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -75,7 +85,7 @@ namespace PCActivityTimeline
             string category = cmbCategory.Text.Trim();
             if (keyword.Length == 0 || category.Length == 0)
             {
-                MessageBox.Show("키워드와 분류를 모두 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                AppDialog.Show(this, "키워드와 분류를 모두 입력하세요.", "입력 오류", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -91,7 +101,7 @@ namespace PCActivityTimeline
         {
             if (gridRules.CurrentRow == null || gridRules.CurrentRow.Index < 0 || gridRules.CurrentRow.Index >= rules.Count)
             {
-                MessageBox.Show("삭제할 규칙을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                AppDialog.Show(this, "삭제할 규칙을 선택하세요.", "안내", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
