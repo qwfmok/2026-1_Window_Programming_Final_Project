@@ -26,6 +26,8 @@ namespace PCActivityTimeline
         private readonly ActivitySummaryService summaryService = new ActivitySummaryService();
         private readonly ActivityTracker tracker;
         private readonly Timer trackingTimer = new Timer();
+        private NotifyIcon trayIcon;
+        private ContextMenuStrip trayMenu;
 
         private DataGridView grid;
         private DateTimePicker dateFilterPicker;
@@ -50,6 +52,7 @@ namespace PCActivityTimeline
             tracker = new ActivityTracker(new WindowInfoProvider(), activityManager);
             InitializeComponent();
             ConfigureActivityGridColumns();
+            InitializeTrayIcon();
             SetTrackingLight(false);
             ConfigureTimer();
             TryLoadKeywordRules();
@@ -101,6 +104,47 @@ namespace PCActivityTimeline
                     SetNotice("오류: 기록을 중지했습니다. " + ex.Message);
                 }
             };
+        }
+
+        private void InitializeTrayIcon()
+        {
+            trayMenu = new ContextMenuStrip();
+            trayMenu.Items.Add("열기", null, (sender, e) => RestoreFromTray());
+            trayMenu.Items.Add("기록 시작", null, StartTracking);
+            trayMenu.Items.Add("기록 중지", null, StopTracking);
+            trayMenu.Items.Add(new ToolStripSeparator());
+            trayMenu.Items.Add("완전 종료", null, ExitApplication);
+
+            trayIcon = new NotifyIcon();
+            trayIcon.Icon = SystemIcons.Application;
+            trayIcon.Text = "나 뭐 했지? - PC Activity Timeline";
+            trayIcon.ContextMenuStrip = trayMenu;
+            trayIcon.Visible = false;
+            trayIcon.DoubleClick += (sender, e) => RestoreFromTray();
+        }
+
+        private void HideToTray()
+        {
+            if (trayIcon != null)
+                trayIcon.Visible = true;
+
+            ShowInTaskbar = false;
+            WindowState = FormWindowState.Minimized;
+            Hide();
+            SetNotice(trackingTimer.Enabled ? "안내: 시스템 트레이에서 기록 중입니다." : "안내: 시스템 트레이로 최소화했습니다.");
+        }
+
+        private void RestoreFromTray()
+        {
+            ShowInTaskbar = true;
+            Show();
+            WindowState = FormWindowState.Normal;
+            Activate();
+
+            if (trayIcon != null)
+                trayIcon.Visible = false;
+
+            SetNotice("안내: 창을 다시 열었습니다.");
         }
 
         private void StartTracking(object sender, EventArgs e)
@@ -649,8 +693,7 @@ namespace PCActivityTimeline
                 if (result == CloseChoice.Minimize)
                 {
                     e.Cancel = true;
-                    WindowState = FormWindowState.Minimized;
-                    SetNotice(trackingTimer.Enabled ? "안내: 최소화 상태로 기록 중입니다." : "안내: 창을 최소화했습니다.");
+                    HideToTray();
                     return;
                 }
 
@@ -671,6 +714,14 @@ namespace PCActivityTimeline
             }
 
             base.OnFormClosing(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (!allowExit && WindowState == FormWindowState.Minimized && Visible)
+                HideToTray();
         }
 
         private CloseChoice ShowCloseChoiceDialog()
@@ -739,6 +790,12 @@ namespace PCActivityTimeline
             if (disposing)
             {
                 if (trackingTimer != null) trackingTimer.Dispose();
+                if (trayIcon != null)
+                {
+                    trayIcon.Visible = false;
+                    trayIcon.Dispose();
+                }
+                if (trayMenu != null) trayMenu.Dispose();
             }
 
             base.Dispose(disposing);

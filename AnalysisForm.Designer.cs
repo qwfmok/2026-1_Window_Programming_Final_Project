@@ -7,6 +7,7 @@ namespace PCActivityTimeline
     {
         private TableLayoutPanel mainPanel;
         private RichTextBox txtAnalysis;
+        private RichTextBox txtInsight;
         private DataGridView gridPrograms;
         private DataGridView gridCategories;
         private Label lblPrograms;
@@ -17,6 +18,7 @@ namespace PCActivityTimeline
         {
             this.mainPanel = new TableLayoutPanel();
             this.txtAnalysis = new RichTextBox();
+            this.txtInsight = new RichTextBox();
             this.gridPrograms = new DataGridView();
             this.gridCategories = new DataGridView();
             this.lblPrograms = new Label();
@@ -27,10 +29,10 @@ namespace PCActivityTimeline
             ((System.ComponentModel.ISupportInitialize)(this.gridCategories)).BeginInit();
             this.SuspendLayout();
 
-            this.ClientSize = new Size(860, 620);
+            this.ClientSize = new Size(980, 700);
             this.StartPosition = FormStartPosition.CenterParent;
             this.Font = new Font("Malgun Gothic", 9F);
-            this.MinimumSize = new Size(760, 520);
+            this.MinimumSize = new Size(820, 600);
 
             this.mainPanel.Dock = DockStyle.Fill;
             this.mainPanel.Padding = new Padding(10);
@@ -38,7 +40,7 @@ namespace PCActivityTimeline
             this.mainPanel.RowCount = 4;
             this.mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             this.mainPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            this.mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
+            this.mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 230F));
             this.mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
             this.mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             this.mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 48F));
@@ -52,7 +54,16 @@ namespace PCActivityTimeline
             this.txtAnalysis.Font = new Font("Malgun Gothic", 9.5F);
             this.txtAnalysis.DetectUrls = false;
             this.mainPanel.Controls.Add(this.txtAnalysis, 0, 0);
-            this.mainPanel.SetColumnSpan(this.txtAnalysis, 2);
+
+            this.txtInsight.Dock = DockStyle.Fill;
+            this.txtInsight.ReadOnly = true;
+            this.txtInsight.ScrollBars = RichTextBoxScrollBars.None;
+            this.txtInsight.BorderStyle = BorderStyle.FixedSingle;
+            this.txtInsight.BackColor = Color.FromArgb(252, 255, 250);
+            this.txtInsight.ForeColor = Color.FromArgb(30, 30, 30);
+            this.txtInsight.Font = new Font("Malgun Gothic", 9.5F);
+            this.txtInsight.DetectUrls = false;
+            this.mainPanel.Controls.Add(this.txtInsight, 1, 0);
 
             this.lblPrograms.Text = "프로그램별 사용 시간";
             this.lblPrograms.Dock = DockStyle.Fill;
@@ -101,10 +112,13 @@ namespace PCActivityTimeline
             grid.ReadOnly = true;
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
+            grid.AllowUserToResizeRows = false;
+            grid.AllowUserToResizeColumns = false;
             grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grid.MultiSelect = false;
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             grid.RowHeadersVisible = false;
+            grid.RowTemplate.Height = 24;
             grid.BackgroundColor = Color.White;
         }
 

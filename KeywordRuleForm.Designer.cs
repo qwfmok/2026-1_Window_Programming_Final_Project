@@ -72,10 +72,13 @@ namespace PCActivityTimeline
             this.gridRules.ReadOnly = true;
             this.gridRules.AllowUserToAddRows = false;
             this.gridRules.AllowUserToDeleteRows = false;
+            this.gridRules.AllowUserToResizeRows = false;
+            this.gridRules.AllowUserToResizeColumns = false;
             this.gridRules.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             this.gridRules.MultiSelect = false;
             this.gridRules.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.gridRules.RowHeadersVisible = false;
+            this.gridRules.RowTemplate.Height = 24;
             this.gridRules.BackgroundColor = Color.White;
             this.gridRules.Columns.Add("Keyword", "키워드");
             this.gridRules.Columns.Add("Category", "분류");
